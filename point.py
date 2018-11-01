@@ -1,3 +1,4 @@
+from math import sqrt
 class Point:
     def __init__(self, x: float = 0.0, y: float = 0.0):
 
@@ -47,3 +48,12 @@ class Point:
 
     def __gt__(self, other: 'Point'):
         return self.x > other.x or (self.x == other.x and self.y > other.y)
+
+    def euclidean_distance(self, b:'Point') -> float:
+        return sqrt((b.x - self.x)**2 + (b.y - self.y)**2)
+
+    @staticmethod
+    def obim(a: 'Point', b:'Point', c:'Point') -> float:
+        sum = 0.0
+        sum += Point.euclidean_distance(a, b) + Point.euclidean_distance(b,c) + Point.euclidean_distance(c, a)
+        return sum
