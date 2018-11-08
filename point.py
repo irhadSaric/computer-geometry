@@ -53,6 +53,9 @@ class Point:
     def euclidean_distance(self, b:'Point') -> float:
         return sqrt((b.x - self.x)**2 + (b.y - self.y)**2)
 
+    def between(self, p1: 'Point', p2: 'Point'):
+        return min(p1.x, p2.x) <= self.x <= max(p1.x, p2.x) and min(p1.y, p2.y) <= self.y <= max(p1.y, p2.y)
+
     @staticmethod
     def obim(a: 'Point', b:'Point', c:'Point') -> float:
         sum = 0.0
@@ -60,7 +63,7 @@ class Point:
         return sum
 
     @staticmethod
-    def ori(a: 'Point', b: 'Point', c: 'Point'):
+    def orientation(a: 'Point', b: 'Point', c: 'Point'):
         p1: Point = a - b
         p2: Point = a - c
 
