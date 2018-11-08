@@ -1,4 +1,5 @@
 from math import sqrt
+
 class Point:
     def __init__(self, x: float = 0.0, y: float = 0.0):
 
@@ -57,3 +58,18 @@ class Point:
         sum = 0.0
         sum += Point.euclidean_distance(a, b) + Point.euclidean_distance(b,c) + Point.euclidean_distance(c, a)
         return sum
+
+    @staticmethod
+    def ori(a: 'Point', b: 'Point', c: 'Point'):
+        p1: Point = a - b
+        p2: Point = a - c
+
+        crossProduct = p1.x * p2.y - p1.y * p2.x
+
+        if crossProduct > 0:
+            return 1 # Left orientation, counter clockwise direction
+        elif crossProduct < 0:
+            return 0 # Right orientation, clockwise direction
+        else:
+            return -1 # Colinear points
+
