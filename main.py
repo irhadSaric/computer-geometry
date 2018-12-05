@@ -1,8 +1,10 @@
 from point import *
 from vector import Vector
 from simplePoly import *
+from GrahamScan import *
 
-a = [(0, 0), (3, 0), (-1, -3), (-1, 3), [-2, 3], [2, 5], [-1, 1], [-4, 1], [-5, -2]]
+a = [(0, 0), (3, 0), (-1, -3), (-1, 3), (-2, 3), (2, 5), (-1, 1), (-4, 1), (-5, -2)]
+b = [(0, 0), (-1, 1), (-1, -3), (-1, 3), (-2, 3), (2, 5), (-4, 1), (-5, -2), (2, -2), (1, -4), (3, -1)]
 
 """if Point.orientation(Point(*a[0]), Point(*a[1]), Point(*a[2])) == 1:
     print("Counter clockwise")
@@ -16,4 +18,5 @@ if Vector.do_intersect(Vector(Point(*a[0]), Point(*a[1])), Vector(Point(*a[2]), 
 else:
     print("Don't intersect")"""
 
-print(simplePoly(a))
+#print(simplePoly(a))
+print(GrahamScan(b))
