@@ -5,6 +5,15 @@ class Vector:
         self.head = head
         self.tail = tail
 
+    def magnitude(self):
+        return self.head.euclidean_distance(self.tail)
+
+    def dot(self, v: 'Vector') -> float:
+        prod_x = (self.tail.x - self.head.x) * (v.tail.x - v.head.x)
+        prod_y = (self.tail.y - self.head.y) * (v.tail.y - v.head.y)
+
+        return prod_x + prod_y
+
     @staticmethod
     def do_intersect(s_1: 'Vector', s_2: 'Vector') -> bool:
 

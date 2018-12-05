@@ -64,8 +64,8 @@ class Point:
 
     @staticmethod
     def orientation(a: 'Point', b: 'Point', c: 'Point'):
-        p1: Point = a - b
-        p2: Point = a - c
+        p1: Point = b - a
+        p2: Point = c - a
 
         crossProduct = p1.x * p2.y - p1.y * p2.x
 
