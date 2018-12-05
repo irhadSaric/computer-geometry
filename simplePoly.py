@@ -10,11 +10,14 @@ def dot(vector1, vector2):
 def magnitude(vector):
     return sqrt(dot(vector, vector))
 
+def euclidean_distance(vector):
+    return sqrt(vector[0]**2 + vector[1]**2)
+
 def angle(imaginaryPoint, mostLeft, v):
     mostLeftVector = (imaginaryPoint[0]-mostLeft[0], imaginaryPoint[1]-mostLeft[1])
     currentVector = (v[0]-mostLeft[0], v[1]-mostLeft[1])
     angle = acos((dot(mostLeftVector, currentVector))/magnitude(mostLeftVector)/magnitude(currentVector))
-    return angle
+    return (angle, euclidean_distance(currentVector))
 
 def simplePoly(vertices):
     mostLeft = find_most_left(vertices)
