@@ -87,7 +87,7 @@ getIntersections(lista)
 Algoritam: https://www.hackerearth.com/practice/math/geometry/line-intersection-using-bentley-ottmann-algorithm/tutorial/
 
 Pitati:
-    1. Izbacivanje linija 42-43, kako napraviti u log vremenu
+    1. Izbacivanje event pointa na linijama 42-43, kako napraviti u log vremenu
     2. Zbog cega se treba izvrsiti zamjena u stablu u else bloku, kad radi i ovako, tj. da li postoji neki slucaj kada
        trenutni program ne bi radio ili bi mu se pokvarila kompleksnost ?
     3. Ako se treba zavrsiti izmjena, kako
