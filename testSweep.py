@@ -18,7 +18,7 @@ def getIntersections(segments: list) -> list:
         event = heappop(priorityQueue)  # Tacka na koju se nailazi
 
         if event.eventType == "s":
-            segment = segments[event.index]  # flight from tuple
+            segment = segments[event.index]  # Segment koji sadrzi tacku
             tree.insert(event.index, (segment, event.index))
 
             try:
