@@ -82,7 +82,14 @@ s6 = Vector(Point(1.375, 1.75), Point(5.0, 1.75))
 lista = [s1, s2, s3, s4, s5, s6]
 
 getIntersections(lista)
-#print(Vector.point_of_intersection(s1, s5))
+
 """
-    
+Algoritam: https://www.hackerearth.com/practice/math/geometry/line-intersection-using-bentley-ottmann-algorithm/tutorial/
+
+Pitati:
+    1. Izbacivanje linija 42-43, kako napraviti u log vremenu
+    2. Zbog cega se treba izvrsiti zamjena u stablu u else bloku, kad radi i ovako, tj. da li postoji neki slucaj kada
+       trenutni program ne bi radio ili bi mu se pokvarila kompleksnost ?
+    3. Ako se treba zavrsiti izmjena, kako
+    4. Da li se na isti fol moze uraditi i projekat, samo sto bi se razlikovala fja point_of_intersection
 """
