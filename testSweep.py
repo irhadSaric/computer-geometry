@@ -1,7 +1,6 @@
 from vector import *
 from bintrees import AVLTree
 from heapq import *
-from queue import PriorityQueue
 
 def getIntersections(segments: list) -> list:
     tree = AVLTree()
