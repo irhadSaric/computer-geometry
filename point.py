@@ -1,4 +1,6 @@
 from math import sqrt
+from sys import maxsize
+
 
 class Point:
     def __init__(self, x: float = 0.0, y: float = 0.0):
@@ -76,3 +78,8 @@ class Point:
         else:
             return -1 # Colinear points
 
+class EventPoint(Point):
+    def __init__(self, eventType: str, index, point: Point):
+        super().__init__(point.x, point.y)
+        self.eventType = eventType
+        self.index = index

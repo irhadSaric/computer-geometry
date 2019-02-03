@@ -40,3 +40,20 @@ class Vector:
                     or s_2.tail.between(s_1.head, s_1.tail) or s_2.head.between(s_1.head, s_1.tail):
                 return True
         return False
+
+    @staticmethod
+    def point_of_intersection(s_1: 'Vector', s_2: 'Vector') -> Point:
+        x12 = s_1.head.x - s_1.tail.x
+        x34 = s_2.head.x - s_2.tail.x
+        y12 = s_1.head.y - s_1.tail.y
+        y34 = s_2.head.y - s_2.tail.y
+
+        c = x12 * y34 - y12 * x34
+
+        a = s_1.head.x * s_1.tail.y - s_1.head.y * s_1.tail.x
+        b = s_2.head.x * s_2.tail.y - s_2.head.y * s_2.tail.x
+
+        x = (a * x34 - b * x12) / c
+        y = (a * y34 - b * y12) / c
+
+        return Point(x, y)
