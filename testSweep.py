@@ -137,28 +137,3 @@ s1 = Segment(Point(1, 1), Point(5, 1))
 s2 = Segment(Point(2, 5), Point(2, 0))
 lista = [s1, s2]
 print(get_intersections(lista))
-
-"""
-Algoritam: https://www.hackerearth.com/practice/math/geometry/line-intersection-using-bentley-ottmann-algorithm/tutorial/
-
-Pitati:
-    1. Izbacivanje event pointa na linijama 42-43, kako napraviti u log vremenu
-    2. Zbog cega se treba izvrsiti zamjena u stablu u else bloku, kad radi i ovako, tj. da li postoji neki slucaj kada
-       trenutni program ne bi radio ili bi mu se pokvarila kompleksnost ?
-    3. Ako se treba zavrsiti izmjena, kako
-    4. Da li se na isti fol moze uraditi i projekat, samo sto bi se razlikovala fja point_of_intersection
-"""
-
-"""
-avl = AVLTree()
-avl.insert(s1)
-avl.insert(s2)
-avl.insert(s3)
-avl.insert(s4)
-
-print (avl.inorder(avl.rootNode))
-
-print(avl.find(s1))
-print(avl.get_prev(s1))
-
-"""
