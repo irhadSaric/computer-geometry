@@ -1,87 +1,142 @@
-from vector import *
-from bintrees import AVLTree
-from heapq import *
+from queue import PriorityQueue
+from Point import *
+from Segment import Segment
+from avlpokusaj import AVLTree
 
-def getIntersections(segments: list) -> list:
+def get_intersections(segments: list):
+    PQ = PriorityQueue()
     tree = AVLTree()
-    priorityQueue = []
-    listOfIntersections = set()
-
-    i = 0
+    visited = dict()
+    set_of_intersection_points = set()
     for segment in segments:
+        PQ.put(EventPoint("start", segment.start, segment))
+        PQ.put(EventPoint("end", segment.end, segment))
 
-        heappush(priorityQueue, EventPoint("s", i, segment.head))
-        heappush(priorityQueue, EventPoint("e", i, segment.tail))
-        i += 1
+    while not PQ.empty():
+        event_point = PQ.get()
+        visited[Point(event_point.x, event_point.y)] = 1
 
-    while priorityQueue.__len__() != 0:
-        event = heappop(priorityQueue)  # Tacka na koju se nailazi
+        if event_point.event_type == "start":
+            current_segment = event_point.segment_identifier
+            tree.insert(current_segment)
+            segment_above = tree.get_succ(tree.find(current_segment).key)
+            segment_below = tree.get_prev(tree.find(current_segment).key)
 
-        if event.eventType == "s":
-            segment = segments[event.index]  # Segment koji sadrzi tacku
-            tree.insert(event.index, (segment, event.index))
+            if segment_above != None:
+                segment_above = tree.get_succ(tree.find(current_segment).key).key
+                if Segment.do_intersect(current_segment, segment_above):
+                    try:
+                        if not visited[Segment.point_of_intersection(current_segment, segment_above)]:
+                            PQ.put(EventPoint("intersection", Segment.point_of_intersection(current_segment, segment_above),
+                                      [segment_above, current_segment]))
+                    except KeyError:
+                        PQ.put(EventPoint("intersection", Segment.point_of_intersection(current_segment, segment_above),
+                                          [segment_above, current_segment]))
 
-            try:
-                segmentAbove = tree.prev_item(event.index)[1][0]
-                segmentAboveID = tree.prev_item(event.index)[1][1]
-            except KeyError:
-                segmentAbove = None
+            if segment_below != None:
+                segment_below = tree.get_prev(tree.find(current_segment).key).key
+                if Segment.do_intersect(current_segment, segment_below):
+                    try:
+                        if not visited[Segment.point_of_intersection(current_segment, segment_below)]:
+                            PQ.put(EventPoint("intersection", Segment.point_of_intersection(current_segment, segment_below),
+                                      [current_segment, segment_below]))
+                    except KeyError:
+                        PQ.put(EventPoint("intersection", Segment.point_of_intersection(current_segment, segment_below),
+                                          [current_segment, segment_below]))
+        elif event_point.event_type == "end":
+            current_segment = event_point.segment_identifier
+            segment_above = tree.get_succ(tree.find(current_segment).key)
+            segment_below = tree.get_prev(tree.find(current_segment).key)
 
-            try:
-                segmentBelow = tree.succ_item(event.index)[1][0]
-                segmentBelowID = tree.prev_item(event.index)[1][1]
-            except KeyError:
-                segmentBelow = None
+            if segment_above != None:
+                segment_above = tree.get_succ(tree.find(current_segment).key).key
+            if segment_below != None:
+                segment_below = tree.get_prev(tree.find(current_segment).key).key
 
-            if segmentAbove != None and segmentBelow != None:
-                if Vector.do_intersect(segmentAbove, segmentBelow):
-                    """print(tree.get_value(event.index)[0].head)
-                    print(segmentAbove.head)
-                    print(segmentBelow.head)
-                    print(Vector.point_of_intersection(segmentAbove, flightBelow))"""
-                    if Vector.point_of_intersection(segmentAbove, segmentBelow) in priorityQueue:
-                        priorityQueue.remove(Vector.point_of_intersection(segmentAbove, segmentBelow))
+            tree.remove(current_segment)
 
-            if segmentAbove != None:
-                if Vector.do_intersect(segmentAbove, segment):
-                    heappush(priorityQueue, EventPoint("i", (segmentAboveID, event.index), Vector.point_of_intersection(segmentAbove, segment)))
-            if segmentBelow != None:
-                if Vector.do_intersect(segmentBelow, segment):
-                    heappush(priorityQueue, EventPoint("i", (event.index, segmentBelowID), Vector.point_of_intersection(segmentBelow, segment)))
-
-        elif event.eventType == "e":
-            segment = segments[event.index]
-            try:
-                segmentAbove = tree.prev_item(event.index)[1][0]
-                segmentAboveID = tree.prev_item(event.index)[1][1]
-            except KeyError:
-                segmentAbove = None
-
-            try:
-                segmentBelow = tree.succ_item(event.index)[1][0]
-                segmentBelowID = tree.succ_item(event.index)[1][1]
-            except KeyError:
-                segmentBelow = None
-
-            tree.remove(event.index)
-            if segmentAbove != None and segmentBelow != None:
-                if Vector.do_intersect(segmentAbove, segmentBelow):
-                    heappush(priorityQueue, EventPoint("i", (segmentAboveID, segmentBelowID), Vector.point_of_intersection(segmentAbove, segmentBelow)))
+            if segment_above != None and segment_below != None and Segment.do_intersect(segment_above, segment_below):
+                try:
+                    if not visited[Segment.point_of_intersection(segment_above, segment_below)]:
+                        PQ.put(EventPoint("intersection", Segment.point_of_intersection(segment_above, segment_below),
+                                          [segment_above, segment_below]))
+                except KeyError:
+                    PQ.put(EventPoint("intersection", Segment.point_of_intersection(segment_above, segment_below),
+                                      [segment_above, segment_below]))
         else:
-            listOfIntersections.add((event.x, event.y))
-            print(listOfIntersections)
+            segment1 = event_point.segment_identifier[0]#upper one
+            segment2 = event_point.segment_identifier[1]#lower one
+            point_of_intersection = Segment.point_of_intersection(segment1, segment2)
+            set_of_intersection_points.add(point_of_intersection)
+            tree.remove(segment1)
+            tree.remove(segment2)
 
-    print("____")
+            segment1.currenty = point_of_intersection.y#lower
+            segment2.currenty = point_of_intersection.y#upper
+            tree.insert(segment1)
+            tree.insert(segment2)
 
-s1 = Vector(Point(0.0, 4.0), Point(5.0, 0.0))
-s2 = Vector(Point(0.5, 2.0), Point(4.0, 1.0))
-s3 = Vector(Point(2.0, 2.0), Point(4.0, 3.0))
-s4 = Vector(Point(1.0, 1.0), Point(2.0, 3.0))
-s5 = Vector(Point(5.0, 0.0), Point(5.0, 3.0))
-s6 = Vector(Point(1.375, 1.75), Point(5.0, 1.75))
+            segment_above = tree.get_succ(segment2)
+            segment_below = tree.get_prev(segment1)
+
+            if segment_above != None:
+                segment_above = tree.get_succ(segment2).key
+            if segment_below != None:
+                segment_below = tree.get_prev(segment1).key
+
+            if segment_above != None and Segment.do_intersect(segment2, segment_above):
+                try:
+                    if not visited[Segment.point_of_intersection(segment_above, segment2)]:
+                        PQ.put(EventPoint("intersection", Segment.point_of_intersection(segment_above, segment2),
+                                          [segment_above, segment2]))
+                except KeyError:
+                    PQ.put(EventPoint("intersection", Segment.point_of_intersection(segment_above, segment2),
+                                      [segment_above, segment2]))
+
+            if segment_below != None and Segment.do_intersect(segment1, segment_below):
+                try:
+                    if not visited[Segment.point_of_intersection(segment1, segment_below)]:
+                        PQ.put(EventPoint("intersection", Segment.point_of_intersection(segment1, segment_below),
+                                          [segment1, segment_below]))
+                except KeyError:
+                    PQ.put(EventPoint("intersection", Segment.point_of_intersection(segment1, segment_below),
+                                      [segment1, segment_below]))
+    return set_of_intersection_points
+
+
+s1 = Segment(Point(0, 4), Point(4, 0))
+s2 = Segment(Point(0, 2), Point(2, 0))
+s3 = Segment(Point(0.5, 0.5), Point(3, 6))
+lista = [s1, s2, s3]
+print(get_intersections(lista))
+print("----")
+
+s1 = Segment(Point(-1, 1), Point(8, 10))
+s2 = Segment(Point(1, 0), Point(4, 2))
+s3 = Segment(Point(0, 3), Point(3, 0))
+lista = [s1, s2, s3]
+print(get_intersections(lista))
+print("----")
+
+s1 = Segment(Point(-3, 0), Point(0, -3))
+s2 = Segment(Point(-5, -2), Point(0, -7))
+s3 = Segment(Point(-4, -6), Point(0, 0))
+lista = [s1, s2, s3]
+print(get_intersections(lista))
+print("----")
+s1 = Segment(Point(1, 1), Point(2, 3))
+s2 = Segment(Point(0, 4), Point(4, 0))
+s3 = Segment(Point(0.5, 2), Point(4, 1))
+s4 = Segment(Point(2, 2), Point(4, 3))
+s5 = Segment(Point(5, 0.25), Point(5.01, 2))
+s6 = Segment(Point(2.5, 1.5), Point(6, 1.51))
 lista = [s1, s2, s3, s4, s5, s6]
-
-getIntersections(lista)
+print(get_intersections(lista))
+print("----")
+s1 = Segment(Point(1, 1), Point(5, 1))
+s2 = Segment(Point(2, 5), Point(2, 0))
+lista = [s1, s2]
+print(get_intersections(lista))
 
 """
 Algoritam: https://www.hackerearth.com/practice/math/geometry/line-intersection-using-bentley-ottmann-algorithm/tutorial/
@@ -92,4 +147,18 @@ Pitati:
        trenutni program ne bi radio ili bi mu se pokvarila kompleksnost ?
     3. Ako se treba zavrsiti izmjena, kako
     4. Da li se na isti fol moze uraditi i projekat, samo sto bi se razlikovala fja point_of_intersection
+"""
+
+"""
+avl = AVLTree()
+avl.insert(s1)
+avl.insert(s2)
+avl.insert(s3)
+avl.insert(s4)
+
+print (avl.inorder(avl.rootNode))
+
+print(avl.find(s1))
+print(avl.get_prev(s1))
+
 """

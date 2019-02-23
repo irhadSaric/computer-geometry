@@ -1,4 +1,4 @@
-from point import *
+from Point import *
 
 def find_centroid(edges):
     xCoordinate = 0.0

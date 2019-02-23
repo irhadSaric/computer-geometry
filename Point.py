@@ -1,7 +1,6 @@
 from math import sqrt
 from sys import maxsize
 
-
 class Point:
     def __init__(self, x: float = 0.0, y: float = 0.0):
 
@@ -47,10 +46,20 @@ class Point:
         return not self.__eq__(other)
 
     def __lt__(self, other: 'Point'):
-        return self.x < other.x or (self.x == other.x and self.y < other.y)
+        return self.x < other.x or (self.x == other.x and self.y > other.y)
 
     def __gt__(self, other: 'Point'):
         return self.x > other.x or (self.x == other.x and self.y > other.y)
+
+    def __hash__(self):
+        from Segment import Segment
+        s = Segment(Point(0, 0), self)
+        k = s.get_coef()
+        string = str(k + self.euclidean_distance(Point(0, 0)) + self.x + self.y)
+        rez = 0
+        for char in string:
+            rez += ord(char)
+        return rez
 
     def euclidean_distance(self, b:'Point') -> float:
         return sqrt((b.x - self.x)**2 + (b.y - self.y)**2)
@@ -65,7 +74,7 @@ class Point:
         return sum
 
     @staticmethod
-    def orientation(a: 'Point', b: 'Point', c: 'Point'):
+    def orientation2D(a: 'Point', b: 'Point', c: 'Point'):
         p1: Point = b - a
         p2: Point = c - a
 
@@ -79,7 +88,7 @@ class Point:
             return -1 # Colinear points
 
 class EventPoint(Point):
-    def __init__(self, eventType: str, index, point: Point):
+    def __init__(self, event_type: str, point: 'Point', segment_identifier):
         super().__init__(point.x, point.y)
-        self.eventType = eventType
-        self.index = index
+        self.event_type = event_type
+        self.segment_identifier = segment_identifier

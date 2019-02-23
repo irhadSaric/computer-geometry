@@ -1,9 +1,29 @@
-from point import *
+from Point import *
 
 class Vector:
     def __init__(self, head: 'Point', tail: 'Point'):
         self.head = head
         self.tail = tail
+        self.currentPosition = head.y
+
+    def changeCurrentPosition(self, value):
+        self.currentPosition = value
+
+    def __lt__(self, other: 'Vector'):
+        if self.head.x == other.head.x and self.head.y == other.head.y:
+            return self.tail.y > other.tail.y or (self.tail.y == other.tail.y and self.tail.x > other.tail.x)
+        return self.head.y < other.head.y or (self.head.y == other.head.y and self.head.x < other.head.x)
+
+    def __le__(self, other):
+        if self.head.x == other.head.x and self.head.y == other.head.y:
+            return self.tail.y > other.tail.y or (self.tail.y == other.tail.y and self.tail.x > other.tail.x)
+        return self.head.y < other.head.y or (self.head.y == other.head.y and self.head.x < other.head.x)
+
+    def __gt__(self, other: 'Vector'):
+        return self.head.y > other.head.y or (self.head.y == other.head.y and self.head.x > other.head.x)
+
+    def __repr__(self):
+        return '({}, {})'.format(self.head, self.tail)
 
     def magnitude(self):
         return self.head.euclidean_distance(self.tail)
