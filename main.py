@@ -1,4 +1,4 @@
-from point import *
+from Point import *
 from vector import Vector
 from simplePoly import *
 from GrahamScan import *

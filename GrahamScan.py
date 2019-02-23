@@ -1,4 +1,4 @@
-from point import *
+from Point import *
 
 def find_most_left_vertex(vertices):
     return min(vertices, key = lambda x: (x[0], -x[1]))
