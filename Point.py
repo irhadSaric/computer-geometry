@@ -56,9 +56,11 @@ class Point:
         s = Segment(Point(0, 0), self)
         k = s.get_coef()
         string = str(k + self.euclidean_distance(Point(0, 0)) + self.x + self.y)
+        i = len(string)
         rez = 0
         for char in string:
-            rez += ord(char)
+            rez += pow(10, i)+ord(char)
+            i -= 1
         return rez
 
     def euclidean_distance(self, b:'Point') -> float:
