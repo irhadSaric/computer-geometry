@@ -137,3 +137,5 @@ s1 = Segment(Point(1, 1), Point(5, 1))
 s2 = Segment(Point(2, 5), Point(2, 0))
 lista = [s1, s2]
 print(get_intersections(lista))
+
+print("hahu")
